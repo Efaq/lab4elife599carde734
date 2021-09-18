@@ -41,3 +41,6 @@ vignettes/*.pdf
 
 #Automatically created files
 Read-and-delete-me
+
+#Workbench files
+Workbench.R
