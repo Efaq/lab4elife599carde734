@@ -1,10 +1,45 @@
-data("iris")
-
-
-my_formula = Petal.Length ~ Sepal.Width + Sepal.Length #establishes independent and dependent variables
-data = iris
-###
-X = model.matrix(object = my_formula, data = data) #extracts the model matrix, that is, the matrix originated from writting the problem as a set of linear equations
-variable_names = all.vars(my_formula) #all variables names in the formula
-y = data[[variable_names[which(!(all.vars(my_formula) %in% colnames(X)))]]] #picks the name from the formula that is not in the columns of X and identifies it as the name of y. picks y from the data with this name
-coef = solve((t(X) %*% X), (t(X) %*% y)) #solves X'X coef = X' y
+linreg = setRefClass(
+  Class = "linreg",
+  fields = c("coefs",
+             "y_est",
+             "residuals",
+             "degrees_freedom",
+             "residual_var",
+             "var_coef",
+             "t_coef",
+             "p_coef"),
+  methods = list(
+    initialize = function(formula, data){
+      X = model.matrix(object = formula, data = data) #extracts the model matrix, that is, the matrix originated from writing the problem as a set of linear equations
+      variable_names = all.vars(formula) #all variables names in the formula
+      y = data[[variable_names[which(!(all.vars(formula) %in% colnames(X)))]]] #picks the name from the formula that is not in the columns of X and identifies it as the name of y. picks y from the data with this name
+      coefs <<- drop(solve((t(X) %*% X), (t(X) %*% y))) #solves X'X coefs = X' y
+      y_est <<- drop(X %*% coefs) #calculates estimated y
+      residuals <<- y - y_est # calculates the residuals
+      n_size = nrow(X)
+      p_size = ncol(X)
+      degrees_freedom <<- n_size - p_size
+      residual_var <<- drop((t(residuals) %*% residuals) / degrees_freedom) #calculates the residual variance
+      var_coef = solve((t(X) %*% X), diag(ncol(X))) #gets the inverse of X'X by solving for the identity as a result
+      colnames(var_coef) = rownames(var_coef)
+      var_coef <<- residual_var * diag(var_coef) #calculates the variance of the coefficients
+      t_coef <<- coefs / sqrt(var_coef) #calculates t-values
+      p_coef <<- t_coef #TODO!!!!!! #calculates p-values
+      },
+    print = function(){
+      base::print(coefs)
+    },
+    resid = function(){
+      return(residuals)
+    },
+    pred = function(){
+      return(y_est)
+    },
+    coef = function(){
+      return(coefs)
+    },
+    summary = function(){
+      
+    }
+  )
+)
