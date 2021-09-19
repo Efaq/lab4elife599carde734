@@ -47,9 +47,6 @@ linreg = setRefClass(
     },
     plot = function(){
       #TODO
-      stand = sqrt(abs((residuals/sd(residuals))))
-      #ggplot(data = data.frame(y_est, residuals)) + geom_point(mapping = aes(x = y_est, y = residuals))
-      ggplot(data = data.frame(y_est, stand)) + geom_point(mapping = aes(x = y_est, y = stand))
-    }
+      }
   )
 )
