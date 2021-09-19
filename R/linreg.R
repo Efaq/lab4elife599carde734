@@ -15,8 +15,7 @@ linreg = setRefClass(
       local_formula <<- formula
       local_data_name <<- deparse(substitute(data))
       X = model.matrix(object = formula, data = data) #extracts the model matrix, that is, the matrix originated from writing the problem as a set of linear equations
-      variable_names = all.vars(formula) #all variables names in the formula
-      y = data[[variable_names[which(!(all.vars(formula) %in% colnames(X)))]]] #picks the name from the formula that is not in the columns of X and identifies it as the name of y. picks y from the data with this name
+      y = data[[all.vars(formula)[[1]]]] #picks the name from the formula that is not in the columns of X and identifies it as the name of y. picks y from the data with this name
       coefs <<- drop(solve((t(X) %*% X), (t(X) %*% y))) #solves X'X coefs = X' y
       y_est <<- drop(X %*% coefs) #calculates estimated y
       residuals <<- y - y_est # calculates the residuals
@@ -31,7 +30,7 @@ linreg = setRefClass(
       p_coef <<- t_coef #TODO!!!!!! #calculates p-values
       },
     print = function(){
-      base::cat(paste("linreg(formula = ", deparse(local_formula), ", data = ", local_data_name, ")\n", sep = ""))
+      cat(paste("linreg(formula = ", deparse(local_formula), ", data = ", local_data_name, ")\n\n", sep = ""))
       base::print(coefs)
     },
     resid = function(){
