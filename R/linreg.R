@@ -27,7 +27,7 @@ linreg = setRefClass(
       colnames(temp_var_coef) = rownames(temp_var_coef)
       var_coef <<- residual_var * diag(temp_var_coef) #calculates the variance of the coefficients
       t_coef <<- coefs / sqrt(var_coef) #calculates t-values
-      p_coef <<- t_coef #TODO!!!!!! #calculates p-values
+      p_coef <<- 2*(1-pt(abs(t_coef), df=degrees_freedom)) #calculates p-values
       },
     print = function(){
       cat(paste("linreg(formula = ", deparse(local_formula), ", data = ", local_data_name, ")\n\n", sep = ""))
@@ -44,8 +44,8 @@ linreg = setRefClass(
     },
     summary = function(){
       for (name in names(coefs)){
-        cat(paste(name, coefs[[name]], sqrt(var_coef[[name]]), t_coef[[name]], "\n", sep=" "))
-      }
+        cat(paste(name, coefs[[name]], sqrt(var_coef[[name]]), t_coef[[name]], p_coef[[name]], "\n", sep=" "))
+      } #TODO - maybe add names to stuff, in case it doesn't break tests
       cat(paste("Residual standard error: ", sqrt(residual_var), " on ", degrees_freedom, " degrees of freedom\n", sep = ""))
     },
     plot = function(){
