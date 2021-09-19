@@ -7,9 +7,13 @@ linreg = setRefClass(
              "residual_var",
              "var_coef",
              "t_coef",
-             "p_coef"),
+             "p_coef",
+             "local_formula",
+             "local_data_name"),
   methods = list(
     initialize = function(formula, data){
+      local_formula <<- formula
+      local_data_name <<- deparse(substitute(data))
       X = model.matrix(object = formula, data = data) #extracts the model matrix, that is, the matrix originated from writing the problem as a set of linear equations
       variable_names = all.vars(formula) #all variables names in the formula
       y = data[[variable_names[which(!(all.vars(formula) %in% colnames(X)))]]] #picks the name from the formula that is not in the columns of X and identifies it as the name of y. picks y from the data with this name
@@ -27,6 +31,7 @@ linreg = setRefClass(
       p_coef <<- t_coef #TODO!!!!!! #calculates p-values
       },
     print = function(){
+      base::cat(paste("linreg(formula = ", deparse(local_formula), ", data = ", local_data_name, ")\n", sep = ""))
       base::print(coefs)
     },
     resid = function(){
@@ -39,7 +44,10 @@ linreg = setRefClass(
       return(coefs)
     },
     summary = function(){
-      
+      #TODO
+    },
+    plot = function(){
+      #TODO
     }
   )
 )
