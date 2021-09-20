@@ -1,3 +1,33 @@
+#'Linear Regression
+#'
+#'\code{linreg} performs linear regression, stores its result and offers methods for analysis.
+#'
+#'\code{linreg} is an RC class. Upon object instantiation, in the \code{initialize} method, it performs
+#'all calculations of quantities of interest, namely estimated coefficients, fitted dependent variable values,
+#'residuals, degrees of freedom of the system, residual variance, the variance of the coefficients,
+#'t-values and p-values for each coefficient.
+#'
+#'Residuals, predicted values and coefficients can be obtained through the methods \code{resid()}, \code{pred()} and \code{coef()}.
+#'
+#'\code{print()} prints out the input information used in the regression and the resulting coefficients.
+#'
+#'\code{summary()} prints out statistics about the regression.
+#'
+#'\code{plot()} plots interesting graphics about the performed regression.
+#'
+#' @examples
+#' data(iris)
+#' regression_object = linreg(Petal.Length~Species, data = iris)
+#' regression_object$resid()
+#' regression_object$pred()
+#' regression_object$coef()
+#' regression_object$summary()
+#' 
+#' @source 
+#' Read more at \url{https://en.wikipedia.org/wiki/Linear_regression}
+#'
+#' @importFrom methods new
+#' @export linreg
 linreg = setRefClass(
   Class = "linreg",
   fields = c("coefs",
@@ -23,11 +53,11 @@ linreg = setRefClass(
       p_size = ncol(X)
       degrees_freedom <<- n_size - p_size
       residual_var <<- drop((t(residuals) %*% residuals) / degrees_freedom) #calculates the residual variance
-      var_coef = solve((t(X) %*% X), diag(ncol(X))) #gets the inverse of X'X by solving for the identity as a result
-      colnames(var_coef) = rownames(var_coef)
-      var_coef <<- residual_var * diag(var_coef) #calculates the variance of the coefficients
+      temp_var_coef = solve((t(X) %*% X), diag(ncol(X))) #gets the inverse of X'X by solving for the identity as a result
+      colnames(temp_var_coef) = rownames(temp_var_coef)
+      var_coef <<- residual_var * diag(temp_var_coef) #calculates the variance of the coefficients
       t_coef <<- coefs / sqrt(var_coef) #calculates t-values
-      p_coef <<- t_coef #TODO!!!!!! #calculates p-values
+      p_coef <<- 2*(1-pt(abs(t_coef), df=degrees_freedom)) #calculates p-values
       },
     print = function(){
       cat(paste("linreg(formula = ", deparse(local_formula), ", data = ", local_data_name, ")\n\n", sep = ""))
@@ -43,9 +73,14 @@ linreg = setRefClass(
       return(coefs)
     },
     summary = function(){
-      #TODO
+      cat(paste("Parameter", "Value", "Standard error", "T-Value", "P-Value", "\n", sep=" "))
+      for (name in names(coefs)){
+        cat(paste(name, coefs[[name]], sqrt(var_coef[[name]]), t_coef[[name]], p_coef[[name]], "***\n", sep=" "))
+      }
+      cat(paste("Residual standard error: ", sqrt(residual_var), " on ", degrees_freedom, " degrees of freedom\n", sep = ""))
     },
     plot = function(){
+
       
       labels_plot_1 <- vector(length=150)
       labels_plot_2 <- vector(length=150)
@@ -91,5 +126,6 @@ linreg = setRefClass(
       return(plist)
       
     }
+
   )
 )

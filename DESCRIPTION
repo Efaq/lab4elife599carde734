@@ -1,10 +1,17 @@
 Package: lab4elife599carde734
 Type: Package
-Title: What the package does (short line)
+Title: Linear regression package for assignment 4 in Advanced R
 Version: 1.0
 Date: 2021-09-17
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Authors@R: c(person("Elisio", "Quintino", email="elife599@student.liu.se", role=c("aut", "cre")),
+             person("Carolina", "Rosario", email="carde734@student.liu.se", role=c("aut")))
+Description: Package for assignment 4 in Advanced R. It contains functionality to perform linear regression using ordinary linear algebra and implements an RC class object. Graphic functionality is provided in order to analyze results.
+License: file LICENSE
 RoxygenNote: 7.1.1
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Imports: ggplot2 (>= 3.3.5), methods
+VignetteBuilder: knitr
