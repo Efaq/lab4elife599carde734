@@ -4,11 +4,23 @@
 \name{lab4elife599carde734-package}
 \alias{lab4elife599carde734}
 \alias{lab4elife599carde734-package}
-\title{lab4elife599carde734: What the package does (short line)}
+\title{lab4elife599carde734: Linear regression package for assignment 4 in Advanced R}
 \description{
-More about what it does (maybe more than one line)
+Package for assignment 4 in Advanced R. It contains functionality to perform linear regression using ordinary linear algebra and implements an RC class object. Graphic functionality is provided in order to analyze results.
 }
 \details{
-COMMENT!!!
+This package is the solution for Lab 4 in Advanced R.
+It implements linear regression functionality through an RC class object called linreg.
+This object is responsible for performing calculations and exposing functions to access results.
+It also offers a summary of the regression as well as plotting capabilities.
+}
+\author{
+\strong{Maintainer}: Elisio Quintino \email{elife599@student.liu.se}
+
+Authors:
+\itemize{
+  \item Carolina Rosario \email{carde734@student.liu.se}
+}
+
 }
 \keyword{internal}
