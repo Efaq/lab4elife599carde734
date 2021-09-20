@@ -5,6 +5,9 @@
 \alias{linreg-class}
 \alias{linreg}
 \title{Linear Regression}
+\source{
+Read more at \url{https://en.wikipedia.org/wiki/Linear_regression}
+}
 \description{
 \code{linreg} performs linear regression, stores its result and offers methods for analysis.
 }

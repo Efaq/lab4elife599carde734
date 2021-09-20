@@ -22,6 +22,9 @@
 #' regression_object$pred()
 #' regression_object$coef()
 #' regression_object$summary()
+#' 
+#' @source 
+#' Read more at \url{https://en.wikipedia.org/wiki/Linear_regression}
 #'
 #' @importFrom methods new
 #' @export linreg
