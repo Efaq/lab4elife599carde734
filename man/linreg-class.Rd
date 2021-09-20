@@ -23,3 +23,12 @@ Residuals, predicted values and coefficients can be obtained through the methods
 \code{plot()} plots interesting graphics about the performed regression.
 }
 
+\examples{
+data(iris)
+regression_object = linreg(Petal.Length~Species, data = iris)
+regression_object$resid()
+regression_object$pred()
+regression_object$coef()
+regression_object$summary()
+
+}
