@@ -9,6 +9,9 @@ Description: Package for assignment 4 in Advanced R. It contains functionality t
 License: file LICENSE
 RoxygenNote: 7.1.1
 Suggests: 
+    knitr,
+    rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports: ggplot2 (>= 3.3.5), methods
+VignetteBuilder: knitr
