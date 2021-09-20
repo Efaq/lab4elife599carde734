@@ -1,0 +1,47 @@
+---
+title: "lab4elife599carde734"
+author: "Carolina Rosário and Elisio Quintino"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{lab4elife599carde734}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, echo=FALSE}
+library(lab4elife599carde734)
+```
+# Linear Regression with linreg
+Here is how we can perform a linear regression analysis with the `linreg`. Let's begin by using a well-known example, the iris dataset.
+```{r}
+data("iris")
+my_linreg_object = linreg(Petal.Length ~ Petal.Width + Sepal.Length + Sepal.Width, data = iris)
+```
+Upon instantiation, the object `my_linreg_object` of class `linreg` performs all calculations necessary and end up containing values of important variables, such as the estimated coefficients and regression statistics.
+
+An overview of the information that defines the object, together with the estimted coefficients, can be obtained by:
+```{r}
+my_linreg_object$print()
+```
+A summary of the statistics related to the regression process are available by:
+```{r}
+my_linreg_object$summary()
+```
+Residuals, predicted dependent variables and coefficients can be directly accessed respectively by `resid()`, `pred()` and `coef()`, as explored below:
+```{r}
+head(my_linreg_object$resid())
+head(my_linreg_object$pred())
+my_linreg_object$coef()
+```
+Using the method `plot()`, we can observe residuals and the square root of absolute values of standardized residuals plotted against the fitted values:
+```{r}
+my_linreg_object$plot()
+```
+
