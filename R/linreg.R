@@ -1,3 +1,23 @@
+#'Linear Regression
+#'
+#'\code{linreg} performs linear regression, stores its result and offers methods for analysis.
+#'
+#'\code{linreg} is an RC class. Upon object instantiation, in the \code{initialize} method, it performs
+#'all calculations of quantities of interest, namely estimated coefficients, fitted dependent variable values,
+#'residuals, degrees of freedom of the system, residual variance, the variance of the coefficients,
+#'t-values and p-values for each coefficient.
+#'
+#'Residuals, predicted values and coefficients can be obtained through the methods \code{resid()}, \code{pred()} and \code{coef()}.
+#'
+#'\code{print()} prints out the input information used in the regression and the resulting coefficients.
+#'
+#'\code{summary()} prints out statistics about the regression.
+#'
+#'\code{plot()} plots interesting graphics about the performed regression.
+#'
+#'
+#'
+#' @export
 linreg = setRefClass(
   Class = "linreg",
   fields = c("coefs",
