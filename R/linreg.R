@@ -15,9 +15,8 @@
 #'
 #'\code{plot()} plots interesting graphics about the performed regression.
 #'
-#'
-#'
-#' @export
+#' @importFrom methods new
+#' @export linreg
 linreg = setRefClass(
   Class = "linreg",
   fields = c("coefs",
