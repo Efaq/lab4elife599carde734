@@ -43,9 +43,10 @@ linreg = setRefClass(
       return(coefs)
     },
     summary = function(){
+      cat(paste("Parameter", "Value", "Standard error", "T-Value", "P-Value", "\n", sep=" "))
       for (name in names(coefs)){
-        cat(paste(name, coefs[[name]], sqrt(var_coef[[name]]), t_coef[[name]], p_coef[[name]], "\n", sep=" "))
-      } #TODO - maybe add names to stuff, in case it doesn't break tests
+        cat(paste(name, coefs[[name]], sqrt(var_coef[[name]]), t_coef[[name]], p_coef[[name]], "***\n", sep=" "))
+      }
       cat(paste("Residual standard error: ", sqrt(residual_var), " on ", degrees_freedom, " degrees of freedom\n", sep = ""))
     },
     plot = function(){
