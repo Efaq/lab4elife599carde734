@@ -27,6 +27,19 @@
 #' Read more at \url{https://en.wikipedia.org/wiki/Linear_regression}
 #'
 #' @importFrom methods new
+#' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 geom_point
+#' @importFrom ggplot2 labs
+#' @importFrom ggplot2 theme
+#' @importFrom ggplot2 geom_text
+#' @importFrom ggplot2 stat_summary
+#' @importFrom ggplot2 geom_hline
+#' @importFrom ggplot2 scale_y_continuous
+#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 element_text
+#' @importFrom ggplot2 element_rect
+#' @importFrom ggplot2 element_line
+#' @importFrom ggplot2 element_blank
 #' @export linreg
 linreg = setRefClass(
   Class = "linreg",

@@ -4,12 +4,12 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-## ----setup, echo=FALSE--------------------------------------------------------
+## ----setup--------------------------------------------------------------------
 library(lab4elife599carde734)
 
 ## -----------------------------------------------------------------------------
 data("iris")
-my_linreg_object = linreg(Petal.Length ~ Petal.Width + Sepal.Length + Sepal.Width, data = iris)
+my_linreg_object = linreg(Petal.Length ~ Species, data = iris)
 
 ## -----------------------------------------------------------------------------
 my_linreg_object$print()
