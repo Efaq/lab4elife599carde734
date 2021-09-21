@@ -124,8 +124,21 @@ linreg = setRefClass(
       
       plist<-list(p1,p2)
       return(plist)
+    
+      
+    }, 
+    
+    
+    theme = function(){
+      
+    
+      
+      theme_minimal()
       
     }
+    
+    
+  
 
   )
 )
