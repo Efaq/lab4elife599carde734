@@ -14,15 +14,15 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
-
-```{r setup, echo=FALSE}
-library(lab4elife599carde734)
-```
 # Linear Regression with linreg
 Here is how we can perform a linear regression analysis with the `linreg`. Let's begin by using a well-known example, the iris dataset.
+```{r setup}
+library(lab4elife599carde734)
+```
+
 ```{r}
 data("iris")
-my_linreg_object = linreg(Petal.Length ~ Petal.Width + Sepal.Length + Sepal.Width, data = iris)
+my_linreg_object = linreg(Petal.Length ~ Species, data = iris)
 ```
 Upon instantiation, the object `my_linreg_object` of class `linreg` performs all calculations necessary and end up containing values of important variables, such as the estimated coefficients and regression statistics.
 

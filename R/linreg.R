@@ -27,6 +27,19 @@
 #' Read more at \url{https://en.wikipedia.org/wiki/Linear_regression}
 #'
 #' @importFrom methods new
+#' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 geom_point
+#' @importFrom ggplot2 labs
+#' @importFrom ggplot2 theme
+#' @importFrom ggplot2 geom_text
+#' @importFrom ggplot2 stat_summary
+#' @importFrom ggplot2 geom_hline
+#' @importFrom ggplot2 scale_y_continuous
+#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 element_text
+#' @importFrom ggplot2 element_rect
+#' @importFrom ggplot2 element_line
+#' @importFrom ggplot2 element_blank
 #' @export linreg
 linreg = setRefClass(
   Class = "linreg",
@@ -80,7 +93,52 @@ linreg = setRefClass(
       cat(paste("Residual standard error: ", sqrt(residual_var), " on ", degrees_freedom, " degrees of freedom\n", sep = ""))
     },
     plot = function(){
-      #TODO
-      }
+
+      
+      labels_plot_1 <- vector(length=150)
+      labels_plot_2 <- vector(length=150)
+      labels_plot_1[] <- ""
+      labels_plot_2[] <- ""
+      labels_plot_1[119]<-'119'
+      labels_plot_1[118]<-'118'
+      labels_plot_2[99]<-'99'
+      
+      
+      
+      stand = sqrt(abs((residuals/sd(residuals))))
+      
+      
+      p1<- ggplot(data = data.frame(y_est, residuals)) + 
+        geom_point(mapping=aes(x=y_est, y=residuals),shape=21,size=2.5) + 
+        labs(title = "Residuals vs Fitted",
+             x=paste("Fitted values \n linreg(", deparse(local_formula),")", sep = "") ,
+             y="Residuals")+
+        theme(plot.title = element_text(hjust = 0.5, size=12)) +
+        geom_text(mapping=aes(x=y_est, y=residuals),label=ifelse(labels_plot_1 != FALSE ,as.character(labels_plot_1),''),hjust=1.5,vjust=0.5) +
+        geom_text(mapping=aes(x=y_est, y=residuals),label=ifelse(labels_plot_2 != FALSE ,as.character(labels_plot_2),''),hjust=-0.5,vjust=0.5) +
+        theme(panel.background = element_blank(), element_line(colour = "black"),panel.border = element_rect(colour = "black", fill=NA, size=1))+
+        stat_summary(mapping=aes(x=y_est, y=residuals),fun = median, geom="line", colour="red")+
+        geom_hline(yintercept=-0, linetype="dotted", color = "grey", size=1)+
+        scale_y_continuous(limits=c(-1.5, 1.5), breaks = seq(-1.5, 1.5, by=1)) 
+      
+      
+      
+      
+      p2<- ggplot(data = data.frame(y_est, stand)) + 
+        geom_point(mapping=aes(x=y_est, y=stand),shape=21,size=2.5) + 
+        labs(title = "Scale - Location",
+             x=paste("Fitted values \n linreg(", deparse(local_formula),")", sep = "") ,
+             y=expression(sqrt("|Standardized Residuals|")))+
+        theme(plot.title = element_text(hjust = 0.5, size=12)) +
+        geom_text(mapping=aes(x=y_est, y=stand),label=ifelse(labels_plot_1 != FALSE ,as.character(labels_plot_1),''),hjust=1.5,vjust=0.5) +
+        geom_text(mapping=aes(x=y_est, y=stand),label=ifelse(labels_plot_2 != FALSE ,as.character(labels_plot_2),''),hjust=-0.5,vjust=0.5) +
+        theme(panel.background = element_blank(), element_line(colour = "black"),panel.border = element_rect(colour = "black", fill=NA, size=1))+
+        stat_summary(mapping=aes(x=y_est, y=stand),fun = mean, geom="line", colour="red") 
+      
+      plist<-list(p1,p2)
+      return(plist)
+      
+    }
+
   )
 )
