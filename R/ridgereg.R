@@ -47,8 +47,12 @@ ridgereg = setRefClass(
       X = model.matrix(object = formula, data = all_normalized_data) #extracts the model matrix, that is, the matrix originated from writing the problem as a set of linear equations
       n<-dim(X)[2]
       y = all_normalized_data[all.vars(formula)][[1]] #picks the name from the formula that is not in the columns of X and identifies it as the name of y. picks y from the data with this name
-      coefs <<- drop(solve(((t(X) %*% X)+(lambda*diag(rep(1,n)))), (t(X) %*% y))) #solves X'X + lambda.I coefs = X' y
-      y_est <<- drop(X %*% coefs) #calculates estimated y
+      #Coefs_linreg = drop(solve((t(X) %*% X), (t(X) %*% y))) #solves X'X coefs = X' y
+      #coefs <<- Coefs_linreg / (1+lambda)
+      #coefs <<- drop(solve(((t(X) %*% X)+(lambda*diag(rep(1,n)))), (t(X) %*% y))) #solves X'X coefs = X' y
+      #coefs <<- drop( solve((t(X) %*% X) + (lambda*diag(rep(1,n)))  ) %*%   (t(X) %*% y) )
+      coefs <<- t(solve((t(X) %*% X) + (lambda*diag(rep(1,n))))%*%t(X)%*%y) 
+      y_est <<-1 # drop(X %*% coefs) #calculates estimated y
       n_size = nrow(X)
       p_size = ncol(X)
       
@@ -71,8 +75,16 @@ ridgereg = setRefClass(
 
 data(iris)
 mod_object_teste <- ridgereg(Petal.Length~Species, data = iris,lambda=0)
-mod_object_teste$print()
+round(mod_object_teste$coef(),1)
+mod_object_teste <- ridgereg(Petal.Length~Species, data = iris,lambda=1)
+round(mod_object_teste$coef(),1)
+mod_object_teste <- ridgereg(Petal.Length~Species, data = iris,lambda=2)
+round(mod_object_teste$coef(),1)
+mod_object_teste <- ridgereg(Petal.Length~Species, data = iris,lambda=15)
+round(mod_object_teste$coef(),1)
+
+
+
 mod_object_teste$coef()
 mod_object_teste$pred()
-
 print(mod_object_teste)
