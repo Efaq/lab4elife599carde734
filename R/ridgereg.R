@@ -8,11 +8,11 @@ ridgereg = setRefClass(
                "local_lambda"),
   methods = list(
     initialize = function(formula, data, lambda){
-    
+      
       local_formula <<- formula
       local_data_name <<- deparse(substitute(data))
       local_lambda <<- lambda
-
+      
       split_formula1<-unlist(strsplit(deparse(formula),"~"))
       split_formula2<-strsplit(split_formula1, " ")[[2]]
       dependent_var_name<- split_formula2[2]
@@ -27,18 +27,18 @@ ridgereg = setRefClass(
       
       #Normalize data 
       
-        normalized_data<-data_2
-        x<-data_2
-        i=1
-        
-        while(i<=length(x))
-        { 
-          normalized_data[i] = suppressWarnings((x[i]-colMeans(x[i]))/(sqrt(var(x[i]))))
-          i=i+1
-        }
-    
+      normalized_data<-data_2
+      x<-data_2
+      i=1
+      
+      while(i<=length(x))
+      { 
+        normalized_data[i] = suppressWarnings((x[i]-colMeans(x[i]))/(sqrt(var(x[i]))))
+        i=i+1
+      }
+      
       #Gather dependent and independent variables again
-    
+      
       all_normalized_data<-cbind.data.frame(normalized_data,dependent_var=dependent_var)
       colnames(all_normalized_data)[colnames(all_normalized_data) == "dependent_var"] <- c(dependent_var_name)
       
@@ -51,8 +51,8 @@ ridgereg = setRefClass(
       y_est <<- drop(X %*% coefs) #calculates estimated y
       n_size = nrow(X)
       p_size = ncol(X)
-     
-     
+      
+      
     },
     print = function(){
       cat(paste("ridgereg(formula = ", deparse(local_formula), ", data = ", local_data_name, ", lambda = ", local_lambda ,")\n\n", sep = ""))
@@ -69,10 +69,9 @@ ridgereg = setRefClass(
 )
 
 
-
-
 data(iris)
 mod_object_teste <- ridgereg(Petal.Length~Species, data = iris,lambda=0)
+mod_object_teste$print()
 mod_object_teste$coef()
 mod_object_teste$pred()
 
