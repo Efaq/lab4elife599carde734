@@ -62,7 +62,7 @@ ridgereg = setRefClass(
       cat(paste("ridgereg(formula = ", deparse(local_formula), ", data = ", local_data_name, ", lambda = ", local_lambda ,")\n\n", sep = ""))
       base::print(coefs)
     },
-    pred = function(){
+    predict = function(){
       return(y_est)
     },
     coef = function(){
@@ -86,5 +86,6 @@ round(mod_object_teste$coef(),1)
 
 
 mod_object_teste$coef()
-mod_object_teste$pred()
+mod_object_teste$predict()
+mod_object_teste$print()
 print(mod_object_teste)
