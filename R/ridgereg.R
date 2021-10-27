@@ -3,63 +3,29 @@ ridgereg = setRefClass(
   Class = "ridgereg",
   fields = c(  "coefs",
                "y_est",
-               "local_formula",
                "local_data_name",
                "local_lambda"),
   methods = list(
     initialize = function(formula, data, lambda){
       
-      local_formula <<- formula
       local_data_name <<- deparse(substitute(data))
-      local_lambda <<- lambda
-      
-      split_formula1<-unlist(strsplit(deparse(formula),"~"))
-      split_formula2<-strsplit(split_formula1, " ")[[2]]
-      dependent_var_name<- split_formula2[2]
-      dependent_var<- data[[paste(dependent_var_name)]]
-      
-      data_2<-data
-      
-      #Remove the dependent variable before normalization of data 
-      
-      drop<- c(paste(dependent_var_name))
-      data_2 = data[,!(names(data) %in% drop)]
-      
-      #Normalize data 
-      
-      normalized_data<-data_2
-      x<-data_2
-      i=1
-      
-      while(i<=length(x))
-      { 
-        normalized_data[i] = suppressWarnings((x[i]-colMeans(x[i]))/(sqrt(var(x[i]))))
-        i=i+1
-      }
-      
-      #Gather dependent and independent variables again
-      
-      all_normalized_data<-cbind.data.frame(normalized_data,dependent_var=dependent_var)
-      colnames(all_normalized_data)[colnames(all_normalized_data) == "dependent_var"] <- c(dependent_var_name)
-      
-      #all_normalized_data<-data 
-      
-      X = model.matrix(object = formula, data = all_normalized_data) #extracts the model matrix, that is, the matrix originated from writing the problem as a set of linear equations
-      n<-dim(X)[2]
-      y = all_normalized_data[all.vars(formula)][[1]] #picks the name from the formula that is not in the columns of X and identifies it as the name of y. picks y from the data with this name
-      #Coefs_linreg = drop(solve((t(X) %*% X), (t(X) %*% y))) #solves X'X coefs = X' y
-      #coefs <<- Coefs_linreg / (1+lambda)
-      #coefs <<- drop(solve(((t(X) %*% X)+(lambda*diag(rep(1,n)))), (t(X) %*% y))) #solves X'X coefs = X' y
-      #coefs <<- drop( solve((t(X) %*% X) + (lambda*diag(rep(1,n)))  ) %*%   (t(X) %*% y) )
-      coefs <<- t(solve((t(X) %*% X) + (lambda*diag(rep(1,n))))%*%t(X)%*%y) 
-      y_est <<-1 # drop(X %*% coefs) #calculates estimated y
-      n_size = nrow(X)
-      p_size = ncol(X)
+      local_lambda<<- lambda
+
+      my_data_x = model.matrix(object = formula, data = data)
+      y = data[[all.vars(formula)[[1]]]]
+      my_normalized_data = scale(my_data_x)
+      X = as.matrix(my_normalized_data)[,-1]
       
       
+
+      coefs <<-drop(solve((t(X)%*%X) + diag(rep(lambda, ncol(X)))) %*% (t(X)%*%y))
+      beta_zero = mean(dep_var_matrix)
+
+      y_est <<- drop(X %*% coefs) #calculates estimated y
+
     },
     print = function(){
-      cat(paste("ridgereg(formula = ", deparse(local_formula), ", data = ", local_data_name, ", lambda = ", local_lambda ,")\n\n", sep = ""))
+      cat(paste("ridgereg(formula = ", deparse(formula), ", data = ", local_data_name, ", lambda = ", local_lambda ,")\n\n", sep = ""))
       base::print(coefs)
     },
     predict = function(){
@@ -73,19 +39,18 @@ ridgereg = setRefClass(
 )
 
 
-data(iris)
-mod_object_teste <- ridgereg(Petal.Length~Species, data = iris,lambda=0)
-round(mod_object_teste$coef(),1)
-mod_object_teste <- ridgereg(Petal.Length~Species, data = iris,lambda=1)
-round(mod_object_teste$coef(),1)
-mod_object_teste <- ridgereg(Petal.Length~Species, data = iris,lambda=2)
-round(mod_object_teste$coef(),1)
-mod_object_teste <- ridgereg(Petal.Length~Species, data = iris,lambda=15)
-round(mod_object_teste$coef(),1)
-
-
-
-mod_object_teste$coef()
-mod_object_teste$predict()
-mod_object_teste$print()
-print(mod_object_teste)
+# data(iris)
+# mod_object_teste <- ridgereg(Petal.Length~Species, data = iris,lambda=0)
+# mod_object_teste$coef()
+# mod_object_teste <- ridgereg(Petal.Length~Species, data = iris,lambda=1)
+# mod_object_teste$coef()
+# mod_object_teste <- ridgereg(Petal.Length~Species, data = iris,lambda=2)
+# mod_object_teste$coef()
+# mod_object_teste <- ridgereg(Petal.Length~Species, data = iris,lambda=15)
+# mod_object_teste$coef()
+# 
+# 
+# 
+# mod_object_teste$coef()
+# mod_object_teste$predict()
+# mod_object_teste$print()
