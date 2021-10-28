@@ -1,8 +1,10 @@
-#'Ridge Regression
+#'Ridge Regression with QR decomposition
 #'
-#'\code{ridgereg} is a method of estimating the coefficients of multiple-regression models in scenarios where independent variables are highly correlated.
+#'\code{ridgereg_QR} is a method of estimating the coefficients of multiple-regression models in scenarios where independent variables are highly correlated.
 #'
-#'\code{ridgereg} is an RC class. Upon object instantiation, in the \code{initialize} method, it performs
+#'\code{ridgereg_QR} differs from \code{ridgereg} in such a way that it performs QR decomposition as part of the linear system resolution.
+#'
+#'\code{ridgereg_QR} is an RC class. Upon object instantiation, in the \code{initialize} method, it performs
 #'all calculations of quantities of interest, namely estimated coefficients and fitted dependent variable values,
 #'
 #'Predicted values and coefficients can be obtained through the methods \code{predict()} and \code{coef()}.
@@ -12,7 +14,7 @@
 #'
 #' @examples
 #' data(iris)
-#'regression_object <- ridgereg(
+#'regression_object <- ridgereg_QR(
 #'   formula=Petal.Width ~ Sepal.Length + Sepal.Width + Petal.Length,
 #'   data = iris, lambda=1)
 #'regression_object$predict()
@@ -22,17 +24,17 @@
 #' @source 
 #' Read more at \url{https://en.wikipedia.org/wiki/Ridge_regression}
 #'
-#' @export ridgereg
+#' @export ridgereg_QR
 #' @importFrom MASS lm.ridge
 
-ridgereg = setRefClass(
-  Class = "ridgereg",
+ridgereg_QR = setRefClass(
+  Class = "ridgereg_QR",
   fields = c(  "coefs",
                "y_est",
                "local_data_name",
                "local_lambda"),
   methods = list(
-    initialize = function(formula, data, lambda=0){
+    initialize = function(formula, data, lambda = 0){
       
 
       local_data_name <<- deparse(substitute(data))
@@ -43,12 +45,20 @@ ridgereg = setRefClass(
       my_normalized_data = scale(my_data_x)
       X = as.matrix(my_normalized_data)[,-1]
       
+      #Beginning of QR decomposition calculations
       
+      Xupdated = rbind(X, diag(rep(sqrt(lambda), ncol(X))))
+      yupdated = c(y, rep(0, ncol(X)))
+      QR = qr(Xupdated)
+      X_Q = qr.Q(QR)
+      X_R = qr.R(QR)
+      coefs <<- drop(solve(X_R, (t(X_Q)%*%yupdated)))
       
-      coefs <<-drop(solve((t(X)%*%X) + diag(rep(lambda, ncol(X)))) %*% (t(X)%*%y))
+      #End of QR decomposition calculations
+      
       beta_zero = mean(y)
       
-      y_est <<- drop((X %*% coefs) + beta_zero) #calculates estimated y
+      y_est <<- drop(X %*% coefs + beta_zero) #calculates estimated y
       
     },
     print = function(){
@@ -64,10 +74,3 @@ ridgereg = setRefClass(
     
   )
 )
-
-
-# data(iris)
-# regression_object <- ridgereg(formula=Petal.Width ~ Sepal.Length + Sepal.Width + Petal.Length, data = iris, lambda=1)
-# regression_object$predict()
-# regression_object$coef()
-# regression_object$print()
