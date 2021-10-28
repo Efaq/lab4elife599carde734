@@ -1,3 +1,4 @@
+context("ridgereg_QR")
 
 data("iris")
 
