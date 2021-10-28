@@ -30,7 +30,7 @@ ridgereg = setRefClass(
                "local_data_name",
                "local_lambda"),
   methods = list(
-    initialize = function(formula, data, lambda){
+    initialize = function(formula, data, lambda=0){
       
 
       local_data_name <<- deparse(substitute(data))
