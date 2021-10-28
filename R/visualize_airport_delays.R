@@ -40,23 +40,16 @@
 #' @importFrom ggplot2 element_rect
 #' @importFrom ggplot2 element_line
 #' @importFrom ggplot2 element_blank
+#' @import dplyr
 #' @export linreg
 
 
 
 visualize_airport_delays <- function () 
 {
-  install.packages("nycflights13")
-  data(package = "nycflights13")  
-  install.packages("dplyr")
-  install.packages("ggplot2")
-  library(ggplot2)
-  library(dplyr)
+  data("flights", envir = environment())  
   
-  
-  data("flights", package = "nycflights13")  
-  
-  data("airports", package = "nycflights13")  
+  data("airports", envir = environment())  
   
   #get only the columns that we need of flights - origins
   flights_treated_ori <- select(flights, origin, dep_delay)
