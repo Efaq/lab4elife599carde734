@@ -21,6 +21,7 @@
 #' Read more at \url{https://en.wikipedia.org/wiki/Ridge_regression}
 #'
 #' @export ridgereg
+#' @importFrom MASS lm.ridge
 
 ridgereg = setRefClass(
   Class = "ridgereg",
