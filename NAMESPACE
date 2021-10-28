@@ -2,8 +2,6 @@
 
 export(linreg)
 export(ridgereg)
-export(ridgereg_QR)
-import(dplyr)
 importFrom(MASS,lm.ridge)
 importFrom(ggplot2,aes)
 importFrom(ggplot2,element_blank)

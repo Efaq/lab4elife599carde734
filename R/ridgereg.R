@@ -12,9 +12,7 @@
 #'
 #' @examples
 #' data(iris)
-#'regression_object <- ridgereg(
-#'   formula=Petal.Width ~ Sepal.Length + Sepal.Width + Petal.Length,
-#'   data = iris, lambda=1)
+#'regression_object <- ridgereg(formula=Petal.Width ~ Sepal.Length + Sepal.Width + Petal.Length, data = iris, lambda=1)
 #'regression_object$predict()
 #'regression_object$coef()
 #'regression_object$print()
