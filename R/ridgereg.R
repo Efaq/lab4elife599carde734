@@ -46,7 +46,7 @@ ridgereg = setRefClass(
       coefs <<-drop(solve((t(X)%*%X) + diag(rep(lambda, ncol(X)))) %*% (t(X)%*%y))
       beta_zero = mean(y)
       
-      y_est <<- drop(X %*% coefs) #calculates estimated y
+      y_est <<- drop((X %*% coefs) + beta_zero) #calculates estimated y
       
     },
     print = function(){
