@@ -1,0 +1,95 @@
+---
+title: "ridgereg"
+author: "Carolina Rosário and Elisio Quintino"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{ridgereg}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+# Predictive modeling with Ridgereg
+Let's do some analysis regarding predictive modeling. The dataset BostonHousing will be used in this demonstration.
+
+```{r setup}
+library(lab4elife599carde734)
+library(caret)
+library(mlbench)
+library(leaps)
+
+
+```
+
+First, we need to divide the BostonHousing data into a test and training dataset.
+```{r}
+data("BostonHousing")
+
+set.seed(123)
+trainIndex <- createDataPartition(BostonHousing$medv, p = .8, 
+                                  list = FALSE, 
+                                  times = 1)
+
+BostonTrain <- BostonHousing[ trainIndex,]
+BostonTest  <- BostonHousing[-trainIndex,]
+
+head(BostonTrain)
+head(BostonTest)
+```
+Fit a linear regression model
+```{r}
+lm_model <- train(medv ~ .,
+               data = BostonTrain,
+               method = "lm")
+
+```
+Fit a linear regression model with forward selection of covariates
+```{r}
+forward_selection  <- train(medv ~ ., data  =  BostonTrain ,
+                             method  =  "leapForward" )
+
+```
+Now we want to evaluate the perfomance of the models that we have just created. To do that, we need to calculate the RMSE (the lower the better) and R-squared (the bigger the better). Both RMSE and R-squared quantify how well a regression model fits a dataset. The RMSE tells us how well a regression model can predict the value of the response variable in absolute terms while R-squared tells us how well a model can predict the value of the response variable in percentage terms
+```{r}
+
+trainX  <-  BostonTrain[,-(which(names(BostonTrain)=="medv"))]
+trainY  <-  BostonTrain$medv
+
+
+testX  <-  BostonTest[,-(which(names(BostonTest)=="medv"))]
+testY  <-  BostonTest$medv
+
+predictions_lm <- predict(lm_model, BostonTest)
+predictions_forward <- predict(forward_selection, BostonTest)
+
+
+#RMSE - The lower the better
+
+lm_model_rmse<- RMSE(predictions_lm,testY)
+lm_forward_rmse<- RMSE(predictions_forward,testY)
+
+#R2 (R-squared) - The higher the better
+
+lm_model_r2<- R2(predictions_lm,testY)
+lm_forward_r2<- R2(predictions_forward,testY)
+
+#RMSE for Linear Regression
+print(lm_model_rmse)
+
+#RMSE for Linear Regression forward selection
+print(lm_forward_rmse)
+
+#R2 for Linear Regression
+print(lm_model_r2)
+
+#R2 for Linear Regression forward selection
+print(lm_forward_r2)
+
+#For both indicator, linear regression model seems to be the model that predicts better the data
+
+```
