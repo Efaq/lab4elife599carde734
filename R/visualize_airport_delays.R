@@ -36,10 +36,10 @@ visualize_airport_delays <- function ()
 
 
   #get only the columns that we need of flights - origins
-  flights_treated_ori <- select(flights, origin, dep_delay)
+  flights_treated_ori <- select(nycflights13::flights, origin, dep_delay)
   
   #get only the columns that we need of flights - destination
-  flights_treated_dest <- select(flights, dest, arr_delay)
+  flights_treated_dest <- select(nycflights13::flights, dest, arr_delay)
   
   #add new column faa with origin information
   flights_treated_ori2<- mutate(flights_treated_ori, faa = origin)
@@ -48,7 +48,7 @@ visualize_airport_delays <- function ()
   flights_treated_dest2<- mutate(flights_treated_dest, faa = dest)
   
   #get only the columns that we need of airports
-  airports_treated <- select(airports, name, faa, lat, lon)
+  airports_treated <- select(nycflights13::airports, name, faa, lat, lon)
   
   
   #join information from airports to flights origin dataset 
