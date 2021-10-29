@@ -23,17 +23,17 @@
 #' @importFrom dplyr left_join
 #' @importFrom dplyr filter
 #' @importFrom dplyr group_by
+#' @importFrom dplyr %>%
 #' @importFrom dplyr summarise
 #' @importFrom dplyr arrange
 #' @importFrom dplyr distinct
 #' @import nycflights13
-#' @usage data(flights)
-#' @usage data(airports)
 #' @export visualize_airport_delays
 
 
 visualize_airport_delays <- function () 
-{ 
+{  
+
 
   #get only the columns that we need of flights - origins
   flights_treated_ori <- select(flights, origin, dep_delay)

@@ -4,9 +4,7 @@
 \alias{visualize_airport_delays}
 \title{Visualize airport delays}
 \usage{
-data(flights)
-
-data(airports)
+visualize_airport_delays()
 }
 \description{
 \code{visualize_airport_delays} returns plots concerning the mean delay of flights for different airports by longitude and latitude. The data used is from nycflights13 package.
